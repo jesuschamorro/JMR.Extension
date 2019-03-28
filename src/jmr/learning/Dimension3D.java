@@ -1,83 +1,121 @@
 package jmr.learning;
 
+import java.util.Objects;
+
 /**
- * Represents a triplet.
- * @param <T> the type of the first value
- * @param <U> the type of the second value
- * @param <V> the type of the third value
- * @author Míriam Mengíbar Rodríguez (mirismr@correo.ugr.es)
+ * The <code>Dimension3D</code> class encapsulates the width, height and depth
+ * of a three-dimensional point (in integer precision)
+ *
+ * @author Jesús Chamorro Martínez (jesus@decsai.ugr.es)
+ * @param <T> the domain of the components.
  */
-public class Dimension3D<T, U, V> {
-         
-    private T height;
-    private U width;
-    private V depth;
+public class Dimension3D<T extends Number>  {
+    /**
+     * The width dimension; negative values can be used.
+     */
+    public T width;
+    /**
+     * The height dimension; negative values can be used.
+     */
+    public T height;
+    /**
+     * The depth dimension; negative values can be used.
+     */
+    public T depth;
     
     /**
-     * Construct a empty triplet
+     * Constructs a <code>Dimension3D</code> and initializes
+     * it to the specified width, height and depth.
+     *
+     * @param width the width
+     * @param height the height
+     * @param depth the depth
      */
-    public Dimension3D() {
-    }
-    
-    /**
-     * Construct a triplet, initializes it from 
-     * three elements given by parameter
-     * @param first First triplet value
-     * @param second Second triplet value 
-     * @param third Third triplet value
-     */
-    public Dimension3D(T first, U second, V third){
-        this.height = first;
-        this.width = second;
-        this.depth= third;
-    }
-
-    /**
-     * Returns height dimension
-     * @return height dimension
-     */
-    public T getHeight() {
-        return height;
-    }
-
-    /**
-     * Set height dimension
-     * @param height dimension
-     */
-    public void setHeight(T height) {
+    public Dimension3D(T width, T height, T depth) {
+        this.width = width;
         this.height = height;
+        this.depth = depth; 
     }
     
+    
     /**
-     * Returns width dimension value
-     * @return widht dimension value
+     * Returns the width of this <code>Dimension3D</code> in double precision.
+     *
+     * @return the width of this <code>Dimension</code>.
      */
-    public U getWidth() {
+    public T getWidth() {
         return width;
     }
 
     /**
-     * Set width dimension value
-     * @param width dimension value
+     * Returns the width of this <code>Dimension3D</code> in double precision.
+     *
+     * @return the width of this <code>Dimension</code>.
      */
-    public void setWidth(U width) {
-        this.width = width;
+    public T getHeight() {
+        return height;
     }
-
+    
     /**
-     * Returns depth dimension value
-     * @return depth dimension value
+     * Returns the depth of this <code>Dimension3D</code> in double precision.
+     *
+     * @return the depth of this <code>Dimension</code>.
      */
-    public V getDepth() {
+    public T getDepth() {
         return depth;
     }
 
     /**
-     * Set depth dimension value
-     * @param depth dimension value
+     * Sets the size of this <code>Dimension3D</code> object to
+     * the specified width, height and depth.
+     *
+     * @param width  the new width 
+     * @param height the new height 
+     * @param depth the new depth
      */
-    public void setDepth(V depth) {
+    public void setSize(T width, T height, T depth) {
+        this.width = width;
+        this.height = height;
         this.depth = depth;
+    }    
+    
+    /**
+     * Checks whether two dimension objects have equal values.
+     *
+     * @return {@code true} if this object is the same as the obj argument;
+     * {@code false} otherwise.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Dimension3D) {
+            Dimension3D d = (Dimension3D)obj;
+            return (width == d.width) && (height == d.height) && (depth == d.depth);
+        }
+        return false;
+    }
+
+    /**
+     * Returns the hash code for this <code>Dimension33D</code>.
+     *
+     * @return    a hash code for this <code>Dimension3D</code>
+     */
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.width);
+        hash = 97 * hash + Objects.hashCode(this.height);
+        hash = 97 * hash + Objects.hashCode(this.depth);
+        return hash;
     }
     
+    /**
+     * Returns a string representation of the values of this
+     * <code>Dimension3D</code> object.
+     *
+     * @return a string representation of this <code>Dimension3D</code> object
+     */
+    @Override
+    public String toString() {
+        return "[" + width + "," + height + "," + depth + "]";
+    }
 }

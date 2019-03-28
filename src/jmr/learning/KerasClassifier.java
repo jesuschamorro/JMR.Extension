@@ -11,7 +11,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,7 +45,7 @@ public class KerasClassifier implements Classifier<BufferedImage, LabeledClassif
     /**
      * Input layer' size (height, width, depth)
      */
-    private Dimension3D<Integer, Integer, Integer> inputDimension;
+    private Dimension3D<Integer> inputDimension;
     /**
      * List of classes that the classifier can produce at the output
      */
@@ -69,7 +68,7 @@ public class KerasClassifier implements Classifier<BufferedImage, LabeledClassif
      * @throws Exception is thrown if the inputDimension doesn't match with the
      * input dimension architecture
      */
-    public KerasClassifier(KerasArchitecture architecture, Dimension3D<Integer, Integer, Integer> inputDimension) throws Exception {
+    public KerasClassifier(KerasArchitecture architecture, Dimension3D inputDimension) throws Exception {
         this.architecture = architecture;
         this.threshold = 0.5;
         this.weighted = false;
@@ -107,7 +106,7 @@ public class KerasClassifier implements Classifier<BufferedImage, LabeledClassif
         String name = modelFile.getName();
         String weightsPath = modelFile.getAbsolutePath();
         String absolutePathXML = weightsPath;
-        Dimension3D<Integer, Integer, Integer> dimension = null;
+        Dimension3D dimension = null;
         List<String> labels = new ArrayList<>();
         int index = name.lastIndexOf('.');
         if (index > 0) {
@@ -154,7 +153,7 @@ public class KerasClassifier implements Classifier<BufferedImage, LabeledClassif
                         throw new Exception("Malformed XML file. Please, follow the JMR rules to construct the XML file.");
                     }
 
-                    dimension = new Dimension3D<>(Integer.valueOf(height), Integer.valueOf(width), Integer.valueOf(depth));
+                    dimension = new Dimension3D(Integer.valueOf(height), Integer.valueOf(width), Integer.valueOf(depth));
 
                 } catch (SAXException ex) {
                     Logger.getLogger(KerasClassifier.class.getName()).log(Level.SEVERE, null, ex);
@@ -224,7 +223,7 @@ public class KerasClassifier implements Classifier<BufferedImage, LabeledClassif
      * classes (read from XML file) doesn't match with the ouput dimension
      * architecture
      */
-    public static KerasClassifier loadModel(File modelFile, Dimension3D<Integer, Integer, Integer> inputDimension) throws Exception {
+    public static KerasClassifier loadModel(File modelFile, Dimension3D inputDimension) throws Exception {
         KerasClassifier kerasClassifier = KerasClassifier.openFileModel(modelFile);
 
         kerasClassifier.setInputDimension(inputDimension);
@@ -247,7 +246,7 @@ public class KerasClassifier implements Classifier<BufferedImage, LabeledClassif
         INDArray imageArray = null;
         try {
 
-            imageArray = new NativeImageLoader(this.inputDimension.getHeight(), this.inputDimension.getWidth(), this.inputDimension.getDepth()).asMatrix(image);
+            imageArray = new NativeImageLoader((int)inputDimension.getHeight(), (int)inputDimension.getWidth(), (int)inputDimension.getDepth()).asMatrix(image);
 
             List<Double> predictions = this.architecture.predict(imageArray);
             for (int i = 0; i < predictions.size(); i++) {
@@ -329,9 +328,9 @@ public class KerasClassifier implements Classifier<BufferedImage, LabeledClassif
      * @throws Exception is thrown if the input dimension doesn't match with the
      * input dimension architecture
      */
-    public void setInputDimension(Dimension3D<Integer, Integer, Integer> inputDimension) throws Exception {
+    public void setInputDimension(Dimension3D inputDimension) throws Exception {
         try {
-            INDArray imageArray = new NativeImageLoader(inputDimension.getHeight(), inputDimension.getWidth(), inputDimension.getDepth()).asMatrix(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB));
+            INDArray imageArray = new NativeImageLoader((int)inputDimension.getHeight(), (int)inputDimension.getWidth(), (int)inputDimension.getDepth()).asMatrix(new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB));
             this.architecture.predict(imageArray);
 
         } catch (IOException ex) {
