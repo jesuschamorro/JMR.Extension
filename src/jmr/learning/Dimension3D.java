@@ -6,8 +6,8 @@ import java.util.Objects;
  * The <code>Dimension3D</code> class encapsulates the width, height and depth
  * of a three-dimensional point (in integer precision)
  *
- * @author Jesús Chamorro Martínez (jesus@decsai.ugr.es)
  * @param <T> the domain of the components.
+ * @author Jesús Chamorro Martínez (jesus@decsai.ugr.es)
  */
 public class Dimension3D<T extends Number>  {
     /**
